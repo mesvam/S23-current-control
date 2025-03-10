@@ -1,0 +1,6 @@
+#!/system/bin/sh
+# units of mA
+HEX_VALUE=`grep "0xc0 : " /sys/class/power_supply/max77705-charger/data | sed 's/0xc0 : //'`
+DEC_VALUE=`echo $((HEX_VALUE))`
+MAX_INPUT_CURRENT="$((($DEC_VALUE+1)*25))"
+echo $MAX_INPUT_CURRENT

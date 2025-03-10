@@ -1,0 +1,14 @@
+#!/system/bin/sh
+# shows system current draw in uA
+FG_DATA=`cat /sys/class/power_supply/max77705-fuelgauge/fg_data`
+AVG_CURRENT_HEX=`grep "0x0b:" <<< "$FG_DATA" | sed 's/0x0b:\t//'`
+AVG_ISYS_HEX=`grep "0x4b:" <<< "$FG_DATA" | sed 's/0x4b:\t//'`
+
+AVG_CURRENT_DEC="$(( ($AVG_CURRENT_HEX + 32768) % 65536 - 32768 ))"  # convert signed word
+AVG_ISYS_DEC="$(($AVG_ISYS_HEX))"
+
+AVG_CURRENT="$(( $AVG_CURRENT_DEC * 15625 * 5 / 100 ))"
+AVG_ISYS="$(( $AVG_ISYS_DEC * 3125 / 10 ))"
+AVG_ISYS="$(( $AVG_ISYS - ($AVG_CURRENT * 6 / 10) ))"
+
+echo "$AVG_ISYS"

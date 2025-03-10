@@ -1,0 +1,7 @@
+#!/system/bin/sh
+# input in mV, resolution of 25 mV
+MAX_CHARGE_CURRENT="$1"
+DEC_VALUE="$(($MAX_CHARGE_CURRENT/25-1))"
+HEX_VALUE=`printf '%x\n' "$DEC_VALUE"`
+echo "0xc0 0x$HEX_VALUE" > /sys/class/power_supply/max77705-charger/data
+echo $HEX_VALUE

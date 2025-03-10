@@ -1,0 +1,6 @@
+#!/system/bin/sh
+# shows USB current draw in uA
+HEX_VALUE=`grep "0xd0:" /sys/class/power_supply/max77705-fuelgauge/fg_data | sed 's/0xd0:\t//'`
+DEC_VALUE=`echo $((HEX_VALUE))`
+INPUT_CURRENT="$(($DEC_VALUE*125))"
+echo $INPUT_CURRENT
